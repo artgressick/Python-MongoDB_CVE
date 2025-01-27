@@ -15,13 +15,8 @@ database = 'nvd'
 def main():
 
     #connection = MongoClient(server,authSource=database)
-    #OLD
-    #connection = MongoClient("mongodb://remote_python:password@cluster0-shard-00-00.ja3ud.gcp.mongodb.net:27017,cluster0-shard-00-01.ja3ud.gcp.mongodb.net:27017,cluster0-shard-00-02.ja3ud.gcp.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-jgyvvk-shard-0&authSource=admin&retryWrites=true&w=majority")
-    #NEW
-    #connection = MongoClient("mongodb+srv://cve_python:password@cluster0.ja3ud.gcp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-    #Localhost
+    #connection = MongoClient("mongodb://USERNAME:PASSWORD@cluster0-shard-00-00.ja3ud.gcp.mongodb.net:27017,cluster0-shard-00-01.ja3ud.gcp.mongodb.net:27017,cluster0-shard-00-02.ja3ud.gcp.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-jgyvvk-shard-0&authSource=admin&retryWrites=true&w=majority")
     connection = MongoClient("mongodb://localhost:27017/<dbname>")
-
 
     db = connection[database]
     collection = ''
@@ -108,14 +103,69 @@ def main():
     updateResult = collection.update_many({'product': {'$regex':':h:cisco:'}}, {"$push": {'vendor':'[cisco]', 'hardware':'[cisco_hw]'}} )
     print("Updating Cisco Hardware - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 #-----------------------------------------------------------------------------------------------------------------------------------------
+#----- Vendor nVidia -----#
+    print("Vendor: nVidia");
+#----- Mellanox Operating System, ONYX, Skyway - Primary and Secondary
+    updateResult = collection.update_many({'product': {'$regex':'o:nvidia:mlnx-os:'}}, {"$push": {'vendor':'[nvidia]', 'os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':'o:nvidia:mlnx-gw:'}}, {"$push": {'vendor':'[nvidia]', 'os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':'o:nvidia:nvda-os_xc:'}}, {"$push": {'vendor':'[nvidia]', 'os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':'o:nvidia:onyx:'}}, {"$push": {'vendor':'[nvidia]', 'os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':'o:nvidia:cumulus*'}}, {"$push": {'vendor':'[nvidia]', 'os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':'o:cumulusnetworks:'}}, {"$push": {'vendor':'[nvidia]', 'os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:nvidia:mlnx-os:'}}, {"$push": {'sec_vendor':'[nvidia]', 'sec_os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:nvidia:mlnx-gw:'}}, {"$push": {'sec_vendor':'[nvidia]', 'sec_os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:nvidia:nvda-os_xc:'}}, {"$push": {'sec_vendor':'[nvidia]', 'sec_os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:nvidia:onyx:'}}, {"$push": {'sec_vendor':'[nvidia]', 'sec_os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:nvidia:cumulus*'}}, {"$push": {'sec_vendor':'[nvidia]', 'sec_os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:cumulusnetworks:'}}, {"$push": {'sec_vendor':'[nvidia]', 'sec_os':'[nvda-os]'}} )
+    print("Updating nVidia OS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+#----- Find All nVidia O:A:H products in Primary
+    updateResult = collection.update_many({'product': {'$regex':':o:nvidia:'}}, {"$push": {'vendor':'[nvidia]', 'os':'[nvidia_os]'}} )
+    print("Updating nVidia Operating Systems - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':':a:nvidia:'}}, {"$push": {'vendor':'[nvidia]', 'application':'[nvidia_app]'}} )
+    print("Updating nVidia Applications - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':':h:nvidia:'}}, {"$push": {'vendor':'[nvidia]', 'hardware':'[nvidia_hw]'}} )
+    print("Updating nVidia Hardware - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+#-----------------------------------------------------------------------------------------------------------------------------------------
 #----- Vendor Juniper Networks -----#
     print("Vendor: Juniper Networks");
 #----- JUNOS Operating System - Primary and Secondary
     updateResult = collection.update_many({'product': {'$regex':'o:juniper:junos:'}}, {"$push": {'vendor':'[juniper]', 'os':'[junos]'}} )
     print("Updating Juniper JunOS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
+    updateResult = collection.update_many({'product': {'$regex':'o:juniper:junos_os_evolved:'}}, {"$push": {'vendor':'[juniper]', 'os':'[junos]'}} )
+    print("Updating Juniper JunOS EVO (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
     updateResult = collection.update_many({'products': {'$regex':'o:juniper:junos:'}}, {"$push": {'sec_vendor':'[juniper]', 'sec_os':'[junos]'}} )
     print("Updating Juniper JunOS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:juniper:junos_os_evolved:'}}, {"$push": {'sec_vendor':'[juniper]', 'sec_os':'[junos]'}} )
+    print("Updating Juniper JunOS EVO (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 #----- Find All Juniper O:A:H products in Primary
     updateResult = collection.update_many({'product': {'$regex':':o:juniper:'}}, {"$push": {'vendor':'[juniper]', 'os':'[juniper_os]'}} )
     print("Updating Juniper Operating Systems - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
@@ -171,16 +221,16 @@ def main():
 #----- Vendor HP-Aruba Networks -----#
     print("Vendor: HP-Aruba Networks");
 #----- ArubaOS Operating System - Primary and Secondary
-    updateResult = collection.update_many({'product': {'$regex':':arubaos-switch:'}}, {"$push": {'vendor':'[aruba]', 'os':'[arubaos]'}} )
+    updateResult = collection.update_many({'product': {'$regex':':arubaos:'}}, {"$push": {'vendor':'[aruba]', 'os':'[arubaos]'}} )
     print("Updating ArubaOS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
-    updateResult = collection.update_many({'products': {'$regex':':arubaos-switch:'}}, {"$push": {'sec_vendor':'[aruba]', 'sec_os':'[arubaos]'}} )
+    updateResult = collection.update_many({'products': {'$regex':':arubaos:'}}, {"$push": {'sec_vendor':'[aruba]', 'sec_os':'[arubaos]'}} )
     print("Updating ArubaOS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
-    updateResult = collection.update_many({'product': {'$regex':':arubaos-cx:'}}, {"$push": {'vendor':'[aruba]', 'os':'[arubaos]'}} )
+    updateResult = collection.update_many({'product': {'$regex':':arubaos-cx:'}}, {"$push": {'vendor':'[aruba]', 'os':'[aruba-cx]'}} )
     print("Updating ArubaOS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
-    updateResult = collection.update_many({'products': {'$regex':':arubaos-cx:'}}, {"$push": {'sec_vendor':'[aruba]', 'sec_os':'[arubaos]'}} )
+    updateResult = collection.update_many({'products': {'$regex':':arubaos-cx:'}}, {"$push": {'sec_vendor':'[aruba]', 'sec_os':'[aruba-cx]'}} )
     print("Updating ArubaOS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 #----- Aruba Clearpass - Primary and Secondary
     updateResult = collection.update_many({'product': {'$regex':'arubanetworks:clearpass'}}, {"$push": {'vendor':'[aruba]', 'application':'[clearpass]'}} )
@@ -189,12 +239,6 @@ def main():
     updateResult = collection.update_many({'products': {'$regex':'arubanetworks:clearpass'}}, {"$push": {'sec_vendor':'[aruba]', 'sec_application':'[clearpass]'}} )
     print("Updating Aruba Clearpass (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 #----- Aruba Wifi - Primary and Secondary
-    updateResult = collection.update_many({'product': {'$regex':':arubaos:'}}, {"$push": {'vendor':'[aruba]', 'os':'[aruba_wifi]'}} )
-    print("Updating ArubaOS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
-
-    updateResult = collection.update_many({'products': {'$regex':':arubaos:'}}, {"$push": {'sec_vendor':'[aruba]', 'sec_os':'[aruba_wifi]'}} )
-    print("Updating ArubaOS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
-
     updateResult = collection.update_many({'product': {'$regex':'arubanetworks:airwave'}}, {"$push": {'vendor':'[aruba]', 'hardware':'[aruba_wifi]'}} )
     print("Updating Aruba Wifi (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
@@ -214,9 +258,6 @@ def main():
     print("Updating HPE/Silver Peak (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 #----- Find All Aruba O:A:H products in Primary
     updateResult = collection.update_many({'product': {'$regex':':o:arubanetworks:'}}, {"$push": {'vendor':'[aruba]', 'os':'[aruba_os]'}} )
-    print("Updating Aruba Operating Systems - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
-
-    updateResult = collection.update_many({'product': {'$regex':':o:hpe:aruba'}}, {"$push": {'vendor':'[aruba]', 'os':'[aruba_os]'}} )
     print("Updating Aruba Operating Systems - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
     updateResult = collection.update_many({'product': {'$regex':':a:arubanetworks:'}}, {"$push": {'vendor':'[aruba]', 'application':'[aruba_app]'}} )
@@ -389,4 +430,3 @@ def main():
 
 if __name__ == '__main__':
     return_value = main()
-

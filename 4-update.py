@@ -158,13 +158,13 @@ def main():
     updateResult = collection.update_many({'product': {'$regex':'o:juniper:junos:'}}, {"$push": {'vendor':'[juniper]', 'os':'[junos]'}} )
     print("Updating Juniper JunOS (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
-    updateResult = collection.update_many({'product': {'$regex':'o:juniper:junos_os_evolved:'}}, {"$push": {'vendor':'[juniper]', 'os':'[junos]'}} )
+    updateResult = collection.update_many({'product': {'$regex':'o:juniper:junos_os_evolved:'}}, {"$push": {'vendor':'[juniper]', 'os':'[junos-evo]'}} )
     print("Updating Juniper JunOS EVO (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
     updateResult = collection.update_many({'products': {'$regex':'o:juniper:junos:'}}, {"$push": {'sec_vendor':'[juniper]', 'sec_os':'[junos]'}} )
     print("Updating Juniper JunOS (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 
-    updateResult = collection.update_many({'products': {'$regex':'o:juniper:junos_os_evolved:'}}, {"$push": {'sec_vendor':'[juniper]', 'sec_os':'[junos]'}} )
+    updateResult = collection.update_many({'products': {'$regex':'o:juniper:junos_os_evolved:'}}, {"$push": {'sec_vendor':'[juniper]', 'sec_os':'[junos-evo]'}} )
     print("Updating Juniper JunOS EVO (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 #----- Find All Juniper O:A:H products in Primary
     updateResult = collection.update_many({'product': {'$regex':':o:juniper:'}}, {"$push": {'vendor':'[juniper]', 'os':'[juniper_os]'}} )
@@ -175,6 +175,30 @@ def main():
 
     updateResult = collection.update_many({'product': {'$regex':':h:juniper:'}}, {"$push": {'vendor':'[juniper]', 'hardware':'[juniper_hw]'}} )
     print("Updating Juniper Hardware - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+#-----------------------------------------------------------------------------------------------------------------------------------------
+#----- Vendor Nokia -----#
+    print("Vendor: Nokia");
+#----- Nokia Operating System - Primary and Secondary
+    updateResult = collection.update_many({'product': {'$regex':'o:nokia:service_router_linux'}}, {"$push": {'vendor':'[nokia]', 'os':'[nokia-sr]'}} )
+    print("Updating Nokia SR (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':'o:nokia:service_router_operating_system'}}, {"$push": {'vendor':'[nokia]', 'os':'[nokia-sr]'}} )
+    print("Updating Nokia SR (Primary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:nokia:service_router_linux'}}, {"$push": {'sec_vendor':'[nokia]', 'sec_os':'[nokia-sr]'}} )
+    print("Updating Nokia SR (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'products': {'$regex':'o:nokia:service_router_operating_system'}}, {"$push": {'sec_vendor':'[nokia]', 'sec_os':'[nokia-sr]'}} )
+    print("Updating Nokia SR (Secondary) - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+#----- Find All Nokia O:A:H products in Primary
+    updateResult = collection.update_many({'product': {'$regex':':o:nokia:'}}, {"$push": {'vendor':'[nokia]', 'os':'[nokia_os]'}} )
+    print("Updating Nokia Operating Systems - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':':a:nokia:'}}, {"$push": {'vendor':'[nokia]', 'application':'[nokia_app]'}} )
+    print("Updating Nokia Applications - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
+
+    updateResult = collection.update_many({'product': {'$regex':':h:nokia:'}}, {"$push": {'vendor':'[nokia]', 'hardware':'[nokia_hw]'}} )
+    print("Updating Nokia Hardware - Matched: ", updateResult.matched_count, " Modified: ", updateResult.modified_count);
 #-----------------------------------------------------------------------------------------------------------------------------------------
 #----- Vendor Arista Networks -----#
     print("Vendor: Arista Networks");
